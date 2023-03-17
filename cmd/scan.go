@@ -33,13 +33,16 @@ var (
 	outFile      string
 )
 
-// scanCmd represents the scan command
-var scanCmd = &cobra.Command{
-	Use:   "scan [IP address]",
-	Short: "Scan the all ports or range of ports",
-	Long:  `Scan the all ports or range of ports.`,
-	Args:  cobra.MinimumNArgs(1),
+// ScanCmd represents the scan command
+var ScanCmd = &cobra.Command{
+	Use:   "sb-portscanner [IP address]",
+	Short: "Port scanner to probe for all open ports on a target IP.",
+	Long:  `Port scanner to probe for all open ports on a target IP.`,
+	// Args:  cobra.MinimumNArgs(1),
 	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return fmt.Errorf("requires argument IP address to scan")
+		}
 		if _, err := checkIPAddress(args[0]); err != nil {
 			return err
 		}
@@ -80,6 +83,25 @@ var scanCmd = &cobra.Command{
 
 		if len(proxyURL) == 0 {
 			proxyURL = ""
+		} else {
+			s := strings.Split(proxyURL, ":")
+			if len(s) == 2 {
+				ps, err := strconv.Atoi(s[1])
+				if err != nil {
+					return fmt.Errorf("port should be an integer between 1-65535")
+				}
+				if !(ps >= 1 && ps <= 65535) {
+					return fmt.Errorf("%d port is not valid. It should be between 1-65535", startPort)
+				}
+
+				_, err = checkIPAddress(s[0])
+				if err != nil {
+					return err
+				}
+			} else {
+				return fmt.Errorf("proxy should in the format as 127.0.0.1:9050")
+			}
+
 		}
 
 		return nil
@@ -130,14 +152,14 @@ var scanCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(scanCmd)
+	// rootCmd.AddCommand(ScanCmd)
 
-	scanCmd.PersistentFlags().IntVarP(&threadCount, "threads", "t", 10, "Enter the number of concurrent threads running.")
-	scanCmd.PersistentFlags().StringVarP(&portRange, "portRange", "r", "1-1000", "Port range - all or range[1-100] format")
-	scanCmd.PersistentFlags().StringVarP(&scanProtocol, "protcol", "p", "tcp", "Protocol to scan in tcp/udp")
-	scanCmd.PersistentFlags().StringVarP(&proxyURL, "proxy", "", "", "Proxy to use for requests [host:port]")
-	scanCmd.PersistentFlags().StringVarP(&outFile, "outFile", "o", "", "Enter the output file name")
-	scanCmd.PersistentFlags().BoolVarP(&smartProbe, "smartProbe", "s", false, "Sends the pack with random [0-30]milliseconds time interval to the target")
+	ScanCmd.PersistentFlags().IntVarP(&threadCount, "threads", "t", 10, "Enter the number of concurrent threads running.")
+	ScanCmd.PersistentFlags().StringVarP(&portRange, "portRange", "r", "1-1000", "Port range - all or range[1-100] format")
+	ScanCmd.PersistentFlags().StringVarP(&scanProtocol, "protcol", "p", "tcp", "Protocol to scan in tcp/udp")
+	ScanCmd.PersistentFlags().StringVarP(&proxyURL, "proxy", "", "", "Proxy to use for requests [host:port]")
+	ScanCmd.PersistentFlags().StringVarP(&outFile, "outFile", "o", "", "Enter the output file name")
+	ScanCmd.PersistentFlags().BoolVarP(&smartProbe, "smartProbe", "s", false, "Sends the pack with random [0-30]milliseconds time interval to the target")
 }
 
 func worker(ports, results chan int) {
