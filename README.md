@@ -41,7 +41,7 @@ env GOOS=windows GOARCH=amd64 go build -o sb-portscanner.exe
 sb-portscanner scan 10.10.11.188 -r 20-100 -o ip188.txt
 ```
 
-```bash
+```console
 $ sb-portscanner -h
 Port scanner to probe for all open ports on a target IP.
 
