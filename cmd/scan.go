@@ -35,7 +35,7 @@ var (
 
 // ScanCmd represents the scan command
 var ScanCmd = &cobra.Command{
-	Use:   "sb-portscanner [IP address]",
+	Use:   "scan [IP address]",
 	Short: "Port scanner to probe for all open ports on a target IP.",
 	Long:  `Port scanner to probe for all open ports on a target IP.`,
 	// Args:  cobra.MinimumNArgs(1),
@@ -152,11 +152,11 @@ var ScanCmd = &cobra.Command{
 }
 
 func init() {
-	// rootCmd.AddCommand(ScanCmd)
+	rootCmd.AddCommand(ScanCmd)
 
-	ScanCmd.PersistentFlags().IntVarP(&threadCount, "threads", "t", 10, "Enter the number of concurrent threads running.")
-	ScanCmd.PersistentFlags().StringVarP(&portRange, "portRange", "r", "1-1000", "Port range - all or range[1-100] format")
-	ScanCmd.PersistentFlags().StringVarP(&scanProtocol, "protcol", "p", "tcp", "Protocol to scan in tcp/udp")
+	ScanCmd.PersistentFlags().IntVarP(&threadCount, "threads", "t", 10, "Enter the number of concurrent threads running")
+	ScanCmd.PersistentFlags().StringVarP(&portRange, "portRange", "r", "1-1000", "Enter \"all\" to scan all ports or between 1 to 65535 in format 20-4000")
+	ScanCmd.PersistentFlags().StringVarP(&scanProtocol, "protocol", "p", "tcp", "Protocol to scan in tcp/udp")
 	ScanCmd.PersistentFlags().StringVarP(&proxyURL, "proxy", "", "", "Proxy to use for requests [host:port]")
 	ScanCmd.PersistentFlags().StringVarP(&outFile, "outFile", "o", "", "Enter the output file name")
 	ScanCmd.PersistentFlags().BoolVarP(&smartProbe, "smartProbe", "s", false, "Sends the pack with random [0-30]milliseconds time interval to the target")

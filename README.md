@@ -16,13 +16,13 @@ This project is a simple implementation of port scanner in GO.
 
 ### Install in linux sb-portscanner
 
-```bash
+```console
 go install github.com/secopsbear/sb-portscanner@latest
 ```
 
 ### Build for linux
 
-```bash
+```console
 go build -o sb-portscanner
 ```
 
@@ -31,30 +31,33 @@ go build -o sb-portscanner
 
 Generate an executable **`sb-portscanner.exe`** for windows environment.   
 
-```bash
+```console
 env GOOS=windows GOARCH=amd64 go build -o sb-portscanner.exe
 ```
 
 ## Example command
 
-```bash
+```console
 sb-portscanner scan 10.10.11.188 -r 20-100 -o ip188.txt
 ```
 
 ```console
-$ sb-portscanner -h
+sb-portscanner scan -h
 Port scanner to probe for all open ports on a target IP.
 
 Usage:
-  sb-portscanner [IP address] [flags]
+  sb-portscanner scan [IP address] [flags]
 
 Flags:
-  -h, --help               help for sb-portscanner
+  -h, --help               help for scan
   -o, --outFile string     Enter the output file name
-  -r, --portRange string   Port range - all or range[1-100] format (default "1-1000")
-  -p, --protcol string     Protocol to scan in tcp/udp (default "tcp")
+  -r, --portRange string   Enter "all" to scan all ports or between 1 to 65535 in format 20-4000 (default "1-1000")
+  -p, --protocol string    Protocol to scan in tcp/udp (default "tcp")
       --proxy string       Proxy to use for requests [host:port]
   -s, --smartProbe         Sends the pack with random [0-30]milliseconds time interval to the target
-  -t, --threads int        Enter the number of concurrent threads running. (default 10)
-
+  -t, --threads int        Enter the number of concurrent threads running (default 10)
 ```
+
+## Find a bug?
+
+If you found an issue or would like to submit an improvement to this project, please submit an issue using the issues tab above.

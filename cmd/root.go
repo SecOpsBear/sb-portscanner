@@ -25,14 +25,14 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "sb-portscanner",
 	Short: "Port Scanner",
-	Long:  `Port scanner to probe for all open ports on a machine.`,
+	Long:  `Port scanner to probe for all open ports on a machine on tcp and udp protocol.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	// err := rootCmd.Execute()
-	err := ScanCmd.Execute()
+	err := rootCmd.Execute()
+	// err := ScanCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
